@@ -5,15 +5,15 @@ public class Player : MonoBehaviour
     [Header("GroundLayer")]
     [SerializeField]
     LayerMask _ground;
-    bool _isBlack = false;
-    SpriteRenderer _spriteRenderer;
 
+    SpriteRenderer _spriteRenderer;
     Rigidbody2D _rb2d;
+    GameObject[] _gameObjects;
     RaycastHit2D _hitGround;
+
     float _speed;
     float _jumpPower = 15.0f;
-
-    GameObject[] _gameObjects;
+    bool _isBlack = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,8 +27,8 @@ public class Player : MonoBehaviour
     void Update()
     {
         //LineCast
-        Debug.DrawLine(transform.position, transform.position - Vector3.up * 1.5f * transform.localScale.y);//接地判定に関するもの
-        _hitGround = Physics2D.Linecast(transform.position, transform.position - Vector3.up * 1.5f * transform.localScale.y, _ground);
+        Debug.DrawLine(transform.position, transform.position - Vector3.up * 1.0f * transform.localScale.y);//接地判定に関するもの
+        _hitGround = Physics2D.Linecast(transform.position, transform.position - Vector3.up * 1.0f * transform.localScale.y, _ground);
 
         //色変更
         if (Input.GetMouseButtonDown(0) && _hitGround)
@@ -52,6 +52,9 @@ public class Player : MonoBehaviour
         _rb2d.linearVelocityX = _speed * 5;
     }
 
+    /// <summary>
+    /// 特定の操作で白黒操作を反転させるメソッド
+    /// </summary>
     void ColorChange()
     {
         if (!_isBlack)
@@ -76,9 +79,10 @@ public class Player : MonoBehaviour
                 go.GetComponent<StageBWObject>().ColliderChange();
             }
         }
-        transform.position += Vector3.down * 2 * transform.localScale.y;//上下反転にともなった座標調整
-        transform.localScale = new Vector3(1, transform.localScale.y * -1, 1);//上下反転
+        transform.position += Vector3.down * 1 * transform.localScale.y;//上下反転にともなった座標調整
+        transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y * -1, transform.localScale.z);//上下反転
         _rb2d.gravityScale *= -1;//重力反転
         _jumpPower *= -1;//ジャンプ方向反転
+        _rb2d.linearVelocityY = 0.0f;
     }
 }
