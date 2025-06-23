@@ -1,9 +1,10 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
-public class Player : MonoBehaviour
+public class CloneofPlayer : MonoBehaviour
 {
     [Header("HitObjectLayer")]
+    [Tooltip("プレイヤーと同じ色を設定")]
     [SerializeField]
     LayerMask _hitLayer;
 
@@ -11,10 +12,14 @@ public class Player : MonoBehaviour
     static RaycastHit2D _hitForward;
     public static RaycastHit2D HitForward { get { return _hitForward; } }
 
+    [Header("Direction(Degree)")]
+    [Tooltip("右を基準に反時計回りに角度をとる")]
+    [SerializeField]
+    float direction;
     float _moveX, _moveY;
     static bool _isMoving = false;
     public static bool IsMoving { get { return _isMoving; } }
-    bool _isBlack = false;
+    bool _isBlack = true;
     bool _isColorChanging = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -27,7 +32,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         //色変更
-        if (Input.GetMouseButtonDown(0) && _hitForward && !_isMoving && !_isColorChanging && CloneofPlayer.HitForward && !CloneofPlayer.IsMoving)
+        if (Input.GetMouseButtonDown(0) && _hitForward && !_isMoving && !_isColorChanging && Player.HitForward && !Player.IsMoving)
         {
             ColorChange(transform.eulerAngles.z * Mathf.Deg2Rad);
         }
@@ -56,14 +61,15 @@ public class Player : MonoBehaviour
 
         //LineCasts
         Debug.DrawLine(transform.position,
-            transform.position + new Vector3(Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad)));//接地判定に関するもの
+            transform.position + new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad)));//接地判定に関するもの
         _hitForward = Physics2D.Linecast(transform.position,
-            transform.position + new Vector3(Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad)),
+            transform.position + new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad)),
             _hitLayer);
 
         //移動
         if (!_isMoving && Mathf.Abs(_moveX) == 1 && !_hitForward && !_isColorChanging)
         {
+            Debug.Log("左右移動");
             _moveY = 0;
             _isMoving = true;
             Vector3 basePos = transform.position;
@@ -71,6 +77,7 @@ public class Player : MonoBehaviour
         }
         if (!_isMoving && Mathf.Abs(_moveY) == 1 && !_hitForward && !_isColorChanging)
         {
+            Debug.Log("上下移動");
             _moveX = 0;
             _isMoving = true;
             Vector3 basePos = transform.position;
@@ -91,7 +98,7 @@ public class Player : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, basePos) < 1.0f)
             {
-                transform.position += new Vector3(moveX / 60, moveY / 60, 0);
+                transform.position += new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad) / 60, Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad) / 60, 0);
                 yield return null;
             }
             else
@@ -135,7 +142,7 @@ public class Player : MonoBehaviour
             _isBlack = false;
         }
 
-        transform.position += new Vector3(Mathf.Cos(theta), Mathf.Sin(theta), 0);//上下反転にともなった座標調整
+        transform.position += new Vector3(Mathf.Cos(theta + direction * Mathf.Deg2Rad), Mathf.Sin(theta + direction * Mathf.Deg2Rad), 0);//上下反転にともなった座標調整
         theta += Mathf.PI;
         transform.eulerAngles = new Vector3(0, 0, theta * Mathf.Rad2Deg);
 
