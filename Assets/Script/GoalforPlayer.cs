@@ -6,6 +6,9 @@ public class GoalforPlayer : MonoBehaviour
     [SerializeField]
     Transform _player;
 
+    static bool _isGoal = false;
+    public static bool IsGoal {  get { return _isGoal; } }
+
     // Update is called once per frame
     void Update()
     {
@@ -13,7 +16,7 @@ public class GoalforPlayer : MonoBehaviour
         {
             if(Vector3.Distance(transform.position, _player.position) < 0.05f)
             {
-                Debug.Log("a");
+                _isGoal = true;
             }
         }
     }

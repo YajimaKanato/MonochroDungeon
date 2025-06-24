@@ -6,6 +6,9 @@ public class GoalforClone : MonoBehaviour
     [SerializeField]
     Transform _clone;
 
+    static bool _isGoal = false;
+    public static bool IsGoal {  get { return _isGoal; } }
+
     // Update is called once per frame
     void Update()
     {
@@ -13,7 +16,7 @@ public class GoalforClone : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, _clone.position) < 0.05f)
             {
-                Debug.Log("a");
+                _isGoal = true;
             }
         }
     }
