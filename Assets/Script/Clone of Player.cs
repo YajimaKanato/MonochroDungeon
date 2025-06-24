@@ -7,8 +7,9 @@ public class CloneofPlayer : MonoBehaviour
     [Tooltip("プレイヤーと同じ色を設定")]
     [SerializeField]
     LayerMask _hitLayer;
-    static RaycastHit2D _hitForward;
-    public static RaycastHit2D HitForward { get { return _hitForward; } }
+    RaycastHit2D _hitWall;
+    static RaycastHit2D _hitBW;
+    public static RaycastHit2D HitBW { get { return _hitBW; } }
 
     SpriteRenderer _spriteRenderer;
 
@@ -16,11 +17,14 @@ public class CloneofPlayer : MonoBehaviour
     [Tooltip("右を基準に反時計回りに角度をとる")]
     [SerializeField]
     float direction;
+
     float _moveX, _moveY;
     static bool _isMoving = false;
     public static bool IsMoving { get { return _isMoving; } }
     bool _isBlack = true;
     bool _isColorChanging = false;
+
+    //Debug.Log("C:");デバッグ用
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -31,14 +35,6 @@ public class CloneofPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //色変更
-        if (Input.GetMouseButtonDown(0) && _hitForward && !_isMoving && !_isColorChanging && Player.HitForward && !Player.IsMoving)
-        {
-            ColorChange(transform.eulerAngles.z * Mathf.Deg2Rad);
-        }
-
-
-
         //方向転換
         if (!_isMoving)
         {
@@ -50,15 +46,15 @@ public class CloneofPlayer : MonoBehaviour
             {
                 transform.localEulerAngles = new Vector3(0, 0, 0);
             }
-            if (_moveX == -1)
+            else if (_moveX == -1)
             {
                 transform.localEulerAngles = new Vector3(0, 0, 180);
             }
-            if (_moveY == 1)
+            else if (_moveY == 1)
             {
                 transform.localEulerAngles = new Vector3(0, 0, 90);
             }
-            if (_moveY == -1)
+            else if (_moveY == -1)
             {
                 transform.localEulerAngles = new Vector3(0, 0, 270);
             }
@@ -67,34 +63,42 @@ public class CloneofPlayer : MonoBehaviour
         //LineCasts
         Debug.DrawLine(transform.position,
             transform.position + new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad)));//接地判定に関するもの
-        _hitForward = Physics2D.Linecast(transform.position,
+        _hitWall = Physics2D.Linecast(transform.position,
             transform.position + new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad)),
             _hitLayer);
+        Debug.DrawLine(transform.position,
+            transform.position + new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad)));//接地判定に関するもの
+        _hitBW = Physics2D.Linecast(transform.position,
+            transform.position + new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad)),
+            _hitLayer & ~(1 << LayerMask.NameToLayer("Wall")));
 
         //移動
-        if (!_isMoving && Mathf.Abs(_moveX) == 1 && !_hitForward && !_isColorChanging)
+        if (!_isMoving && Mathf.Abs(_moveX) == 1 && !_hitWall && !_isColorChanging)
         {
-            Debug.Log("上下移動");
+            Debug.Log("C:左右移動");
             _moveY = 0;
             _isMoving = true;
             Vector3 basePos = transform.position;
             StartCoroutine(MoveCoroutine(basePos));
         }
-        if (!_isMoving && Mathf.Abs(_moveY) == 1 && !_hitForward && !_isColorChanging)
+        else if (!_isMoving && Mathf.Abs(_moveY) == 1 && !_hitWall && !_isColorChanging)
         {
-            Debug.Log("左右移動");
+            Debug.Log("C:上下移動");
             _moveX = 0;
             _isMoving = true;
             Vector3 basePos = transform.position;
             StartCoroutine(MoveCoroutine(basePos));
+        }
+        //色変更
+        else if (Input.GetMouseButtonDown(0) && _hitBW && !_isMoving && !_isColorChanging && Player.HitBW && !Player.IsMoving)
+        {
+            ColorChange(transform.eulerAngles.z * Mathf.Deg2Rad);
         }
     }
 
     /// <summary>
     /// 移動を滑らかにするコルーチン
     /// </summary>
-    /// <param name="moveX"></param>
-    /// <param name="moveY"></param>
     /// <param name="basePos"></param>
     /// <returns></returns>
     IEnumerator MoveCoroutine(Vector3 basePos)
@@ -108,7 +112,7 @@ public class CloneofPlayer : MonoBehaviour
             }
             else
             {
-                transform.position = basePos + new Vector3(Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad), 0);
+                transform.position = basePos + new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), 0);
                 //移動による誤差の調整
                 _isMoving = false;
                 yield break;
@@ -121,7 +125,7 @@ public class CloneofPlayer : MonoBehaviour
     /// </summary>
     /// <param name="time"></param>
     /// <returns></returns>
-    IEnumerator StayCoroutine(float time)
+    IEnumerator ColorChangeCoroutine(float time)
     {
         _isColorChanging = true;
         yield return new WaitForSeconds(time);
@@ -136,15 +140,17 @@ public class CloneofPlayer : MonoBehaviour
     {
         if (!_isBlack)
         {
-            Debug.Log("黒に変更");
-            _hitLayer = 1 << LayerMask.NameToLayer("Black");
+            Debug.Log("C:黒に変更");
+            _hitLayer &= ~(1 << LayerMask.NameToLayer("White"));
+            _hitLayer |= (1 << LayerMask.NameToLayer("Black"));
             _spriteRenderer.color = Color.black;
             _isBlack = true;
         }
         else
         {
-            Debug.Log("白に変更");
-            _hitLayer = 1 << LayerMask.NameToLayer("White");
+            Debug.Log("C:白に変更");
+            _hitLayer &= ~(1 << LayerMask.NameToLayer("Black"));
+            _hitLayer |= (1 << LayerMask.NameToLayer("White"));
             _spriteRenderer.color = Color.white;
             _isBlack = false;
         }
@@ -153,6 +159,6 @@ public class CloneofPlayer : MonoBehaviour
         theta += Mathf.PI;
         transform.eulerAngles = new Vector3(0, 0, theta * Mathf.Rad2Deg);
 
-        StartCoroutine(StayCoroutine(0.5f));
+        StartCoroutine(ColorChangeCoroutine(0.5f));
     }
 }
