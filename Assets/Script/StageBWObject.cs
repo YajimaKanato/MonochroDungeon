@@ -2,22 +2,37 @@ using UnityEngine;
 
 public class StageBWObject : MonoBehaviour
 {
-    BoxCollider2D _box2d;
+    [Header("Player")]
+    [SerializeField]
+    Transform _player;
+
+    [Header("Clone")]
+    [SerializeField]
+    Transform _clone;
+
+    SpriteRenderer _sprite;
 
     private void Start()
     {
-        _box2d = GetComponent<BoxCollider2D>();
+        _sprite = GetComponent<SpriteRenderer>();
     }
 
-    public void ColliderChange()
+    private void Update()
     {
-        if (_box2d.isTrigger)
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
         {
-            _box2d.isTrigger = false;
+            _sprite.color = Color.white;
+            this.gameObject.layer = LayerMask.NameToLayer("White");
         }
-        else
+        else if (collision.gameObject.tag == "Clone")
         {
-            _box2d.isTrigger = true;
+            _sprite.color = Color.black;
+            this.gameObject.layer = LayerMask.NameToLayer("Black");
         }
     }
 }

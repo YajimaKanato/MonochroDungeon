@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     static bool _isMoving = false;
     public static bool IsMoving { get { return _isMoving; } }
     bool _isBlack = false;
-    bool _isColorChanging = false;
+    bool _isColorChanging = false;//色変えの時が来たら使う
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -65,16 +65,16 @@ public class Player : MonoBehaviour
             _hitLayer & ~(1 << LayerMask.NameToLayer("Wall")));
 
         //移動
-        if (!_isMoving && Mathf.Abs(_moveX) == 1 && !_hitWall && !_isColorChanging)
-        {
+        if (!_isMoving && Mathf.Abs(_moveX) == 1 && !_hitWall)
+        {// && !_isColorChanging
             Debug.Log("左右移動");
             _moveY = 0;
             _isMoving = true;
             Vector3 basePos = transform.position;
             StartCoroutine(MoveCoroutine(_moveX, _moveY, basePos));
         }
-        else if (!_isMoving && Mathf.Abs(_moveY) == 1 && !_hitWall && !_isColorChanging)
-        {
+        else if (!_isMoving && Mathf.Abs(_moveY) == 1 && !_hitWall)
+        {// && !_isColorChanging
             Debug.Log("上下移動");
             _moveX = 0;
             _isMoving = true;
@@ -82,10 +82,10 @@ public class Player : MonoBehaviour
             StartCoroutine(MoveCoroutine(_moveX, _moveY, basePos));
         }
         //色変更
-        else if (Input.GetMouseButtonDown(0) && _hitBW && !_isMoving && !_isColorChanging && CloneofPlayer.HitBW && !CloneofPlayer.IsMoving)
+        /*else if (Input.GetMouseButtonDown(0) && _hitBW && !_isMoving && !_isColorChanging && CloneofPlayer.HitBW && !CloneofPlayer.IsMoving)
         {
             ColorChange(transform.eulerAngles.z * Mathf.Deg2Rad);
-        }
+        }*/
     }
 
     /// <summary>
@@ -122,7 +122,6 @@ public class Player : MonoBehaviour
     {
         _isColorChanging = true;
         yield return new WaitForSeconds(time);
-        Debug.Log("a");
         _isColorChanging = false;
         yield break;
     }
