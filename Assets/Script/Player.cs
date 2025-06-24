@@ -6,10 +6,10 @@ public class Player : MonoBehaviour
     [Header("HitObjectLayer")]
     [SerializeField]
     LayerMask _hitLayer;
-
-    SpriteRenderer _spriteRenderer;
     static RaycastHit2D _hitForward;
     public static RaycastHit2D HitForward { get { return _hitForward; } }
+
+    SpriteRenderer _spriteRenderer;
 
     float _moveX, _moveY;
     static bool _isMoving = false;
@@ -32,26 +32,31 @@ public class Player : MonoBehaviour
             ColorChange(transform.eulerAngles.z * Mathf.Deg2Rad);
         }
 
-        //à⁄ìÆì¸óÕ
-        _moveX = Input.GetAxisRaw("Horizontal");
-        _moveY = Input.GetAxisRaw("Vertical");
+        
 
         //ï˚å¸ì]ä∑
-        if (_moveX == 1 && Mathf.Abs(_moveY) != 1)
+        if (!_isMoving)
         {
-            transform.localEulerAngles = new Vector3(0, 0, 0);
-        }
-        if (_moveX == -1 && Mathf.Abs(_moveY) != 1)
-        {
-            transform.localEulerAngles = new Vector3(0, 0, 180);
-        }
-        if (_moveY == 1 && Mathf.Abs(_moveX) != 1)
-        {
-            transform.localEulerAngles = new Vector3(0, 0, 90);
-        }
-        if (_moveY == -1 && Mathf.Abs(_moveX) != 1)
-        {
-            transform.localEulerAngles = new Vector3(0, 0, 270);
+            //à⁄ìÆì¸óÕ
+            _moveX = Input.GetAxisRaw("Horizontal");
+            _moveY = Input.GetAxisRaw("Vertical");
+
+            if (_moveX == 1)
+            {
+                transform.localEulerAngles = new Vector3(0, 0, 0);
+            }
+            if (_moveX == -1)
+            {
+                transform.localEulerAngles = new Vector3(0, 0, 180);
+            }
+            if (_moveY == 1)
+            {
+                transform.localEulerAngles = new Vector3(0, 0, 90);
+            }
+            if (_moveY == -1)
+            {
+                transform.localEulerAngles = new Vector3(0, 0, 270);
+            }
         }
 
         //LineCasts
@@ -96,6 +101,7 @@ public class Player : MonoBehaviour
             }
             else
             {
+                transform.position = basePos + new Vector3(_moveX, _moveY, 0);//à⁄ìÆÇ…ÇÊÇÈåÎç∑ÇÃí≤êÆ
                 _isMoving = false;
                 yield break;
             }

@@ -7,10 +7,10 @@ public class CloneofPlayer : MonoBehaviour
     [Tooltip("プレイヤーと同じ色を設定")]
     [SerializeField]
     LayerMask _hitLayer;
-
-    SpriteRenderer _spriteRenderer;
     static RaycastHit2D _hitForward;
     public static RaycastHit2D HitForward { get { return _hitForward; } }
+
+    SpriteRenderer _spriteRenderer;
 
     [Header("Direction(Degree)")]
     [Tooltip("右を基準に反時計回りに角度をとる")]
@@ -37,26 +37,31 @@ public class CloneofPlayer : MonoBehaviour
             ColorChange(transform.eulerAngles.z * Mathf.Deg2Rad);
         }
 
-        //移動入力
-        _moveX = Input.GetAxisRaw("Horizontal");
-        _moveY = Input.GetAxisRaw("Vertical");
+
 
         //方向転換
-        if (_moveX == 1 && Mathf.Abs(_moveY) != 1)
+        if (!_isMoving)
         {
-            transform.localEulerAngles = new Vector3(0, 0, 0);
-        }
-        if (_moveX == -1 && Mathf.Abs(_moveY) != 1)
-        {
-            transform.localEulerAngles = new Vector3(0, 0, 180);
-        }
-        if (_moveY == 1 && Mathf.Abs(_moveX) != 1)
-        {
-            transform.localEulerAngles = new Vector3(0, 0, 90);
-        }
-        if (_moveY == -1 && Mathf.Abs(_moveX) != 1)
-        {
-            transform.localEulerAngles = new Vector3(0, 0, 270);
+            //移動入力
+            _moveX = Input.GetAxisRaw("Horizontal");
+            _moveY = Input.GetAxisRaw("Vertical");
+
+            if (_moveX == 1)
+            {
+                transform.localEulerAngles = new Vector3(0, 0, 0);
+            }
+            if (_moveX == -1)
+            {
+                transform.localEulerAngles = new Vector3(0, 0, 180);
+            }
+            if (_moveY == 1)
+            {
+                transform.localEulerAngles = new Vector3(0, 0, 90);
+            }
+            if (_moveY == -1)
+            {
+                transform.localEulerAngles = new Vector3(0, 0, 270);
+            }
         }
 
         //LineCasts
@@ -69,19 +74,19 @@ public class CloneofPlayer : MonoBehaviour
         //移動
         if (!_isMoving && Mathf.Abs(_moveX) == 1 && !_hitForward && !_isColorChanging)
         {
-            Debug.Log("左右移動");
+            Debug.Log("上下移動");
             _moveY = 0;
             _isMoving = true;
             Vector3 basePos = transform.position;
-            StartCoroutine(MoveCoroutine(_moveX, _moveY, basePos));
+            StartCoroutine(MoveCoroutine(basePos));
         }
         if (!_isMoving && Mathf.Abs(_moveY) == 1 && !_hitForward && !_isColorChanging)
         {
-            Debug.Log("上下移動");
+            Debug.Log("左右移動");
             _moveX = 0;
             _isMoving = true;
             Vector3 basePos = transform.position;
-            StartCoroutine(MoveCoroutine(_moveX, _moveY, basePos));
+            StartCoroutine(MoveCoroutine(basePos));
         }
     }
 
@@ -92,7 +97,7 @@ public class CloneofPlayer : MonoBehaviour
     /// <param name="moveY"></param>
     /// <param name="basePos"></param>
     /// <returns></returns>
-    IEnumerator MoveCoroutine(float moveX, float moveY, Vector3 basePos)
+    IEnumerator MoveCoroutine(Vector3 basePos)
     {
         while (true)
         {
@@ -103,6 +108,8 @@ public class CloneofPlayer : MonoBehaviour
             }
             else
             {
+                transform.position = basePos + new Vector3(Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad), 0);
+                //移動による誤差の調整
                 _isMoving = false;
                 yield break;
             }
