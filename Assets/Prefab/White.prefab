@@ -147,5 +147,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be57a29e081a3e5479bef03928b3ea8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 0}
-  _clone: {fileID: 0}
+  _player: {fileID: 1475956080714020945, guid: 9ee0730326d39004cb9d7694ee45a2a1, type: 3}
+  _clone: {fileID: 9115556372915717550, guid: c0d051b0b26bb61449d89c2aa09b8af2, type: 3}

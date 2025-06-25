@@ -9,6 +9,11 @@ public class GoalforPlayer : MonoBehaviour
     static bool _isGoal = false;
     public static bool IsGoal {  get { return _isGoal; } }
 
+    private void Start()
+    {
+        _isGoal = false;
+    }
+
     // Update is called once per frame
     void Update()
     {

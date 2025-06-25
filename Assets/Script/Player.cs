@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     RaycastHit2D _hitWall;
     static RaycastHit2D _hitBW;
     public static RaycastHit2D HitBW { get { return _hitBW; } }
+    Vector3 _dir;
 
     SpriteRenderer _spriteRenderer;
 
@@ -28,7 +29,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         //方向転換
-        if (!_isMoving)
+        if (!_isMoving && !GameDirector.IsPausing)
         {
             //移動入力
             _moveX = Input.GetAxisRaw("Horizontal");
@@ -52,16 +53,19 @@ public class Player : MonoBehaviour
             }
         }
 
+        //進行方向
+        _dir = new Vector3(Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad));
+
         //LineCasts
         Debug.DrawLine(transform.position,
-            transform.position + new Vector3(Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad)));//接地判定に関するもの
+            transform.position + _dir);//接地判定に関するもの
         _hitWall = Physics2D.Linecast(transform.position,
-            transform.position + new Vector3(Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad)),
+            transform.position + _dir,
             _hitLayer);
         Debug.DrawLine(transform.position,
-            transform.position + new Vector3(Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad)));//接地判定に関するもの
+            transform.position + _dir);//接地判定に関するもの
         _hitBW = Physics2D.Linecast(transform.position,
-            transform.position + new Vector3(Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad)),
+            transform.position + _dir,
             _hitLayer & ~(1 << LayerMask.NameToLayer("Wall")));
 
         //移動
@@ -97,16 +101,17 @@ public class Player : MonoBehaviour
     /// <returns></returns>
     IEnumerator MoveCoroutine(float moveX, float moveY, Vector3 basePos)
     {
+        _dir = new Vector3(Mathf.Cos(transform.eulerAngles.z * Mathf.Deg2Rad), Mathf.Sin(transform.eulerAngles.z * Mathf.Deg2Rad));
         while (true)
         {
             if (Vector3.Distance(transform.position, basePos) < 1.0f)
             {
-                transform.position += new Vector3(moveX / 60, moveY / 60, 0);
+                transform.position += _dir / 90;
                 yield return null;
             }
             else
             {
-                transform.position = basePos + new Vector3(_moveX, _moveY, 0);//移動による誤差の調整
+                transform.position = basePos + _dir;//移動による誤差の調整
                 _isMoving = false;
                 yield break;
             }

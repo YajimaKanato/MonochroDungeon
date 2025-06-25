@@ -10,13 +10,19 @@ public class CloneofPlayer : MonoBehaviour
     RaycastHit2D _hitWall;
     static RaycastHit2D _hitBW;
     public static RaycastHit2D HitBW { get { return _hitBW; } }
+    Vector3 _dir;
 
+    [Header("CloneScale")]
+    [Tooltip("プレイヤーに対して鏡写しにできる")]
+    [SerializeField]
+    Transform _cloneTransform;
     SpriteRenderer _spriteRenderer;
+    Vector _vector;
 
     [Header("Direction(Degree)")]
     [Tooltip("右を基準に反時計回りに角度をとる")]
     [SerializeField]
-    float direction;
+    float _direction;
 
     float _moveX, _moveY;
     static bool _isMoving = false;
@@ -30,13 +36,14 @@ public class CloneofPlayer : MonoBehaviour
     void Start()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _vector = new Vector();
     }
 
     // Update is called once per frame
     void Update()
     {
         //方向転換
-        if (!_isMoving)
+        if (!_isMoving && !GameDirector.IsPausing)
         {
             //移動入力
             _moveX = Input.GetAxisRaw("Horizontal");
@@ -60,16 +67,19 @@ public class CloneofPlayer : MonoBehaviour
             }
         }
 
+        //進行方向
+        _dir = new Vector3(Mathf.Cos((transform.eulerAngles.z + _direction) * Mathf.Deg2Rad), Mathf.Sin((transform.eulerAngles.z + _direction) * Mathf.Deg2Rad));
+        _dir = _vector.Multiple(_dir, _vector.CoordinatetoOne(_cloneTransform.localScale));
         //LineCasts
         Debug.DrawLine(transform.position,
-            transform.position + new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad)));//接地判定に関するもの
+            transform.position + _dir);//接地判定に関するもの
         _hitWall = Physics2D.Linecast(transform.position,
-            transform.position + new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad)),
+            transform.position + _dir,
             _hitLayer);
         Debug.DrawLine(transform.position,
-            transform.position + new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad)));//接地判定に関するもの
+            transform.position + _dir);//接地判定に関するもの
         _hitBW = Physics2D.Linecast(transform.position,
-            transform.position + new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad)),
+            transform.position + _dir,
             _hitLayer & ~(1 << LayerMask.NameToLayer("Wall")));
 
         //移動
@@ -107,12 +117,12 @@ public class CloneofPlayer : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, basePos) < 1.0f)
             {
-                transform.position += new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad) / 60, Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad) / 60, 0);
+                transform.position += _dir / 90;
                 yield return null;
             }
             else
             {
-                transform.position = basePos + new Vector3(Mathf.Cos((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), Mathf.Sin((transform.eulerAngles.z + direction) * Mathf.Deg2Rad), 0);
+                transform.position = basePos + _dir;
                 //移動による誤差の調整
                 _isMoving = false;
                 yield break;
@@ -155,7 +165,7 @@ public class CloneofPlayer : MonoBehaviour
             _isBlack = false;
         }
 
-        transform.position += new Vector3(Mathf.Cos(theta + direction * Mathf.Deg2Rad), Mathf.Sin(theta + direction * Mathf.Deg2Rad), 0);//上下反転にともなった座標調整
+        transform.position += new Vector3(Mathf.Cos(theta + _direction * Mathf.Deg2Rad), Mathf.Sin(theta + _direction * Mathf.Deg2Rad), 0);//上下反転にともなった座標調整
         theta += Mathf.PI;
         transform.eulerAngles = new Vector3(0, 0, theta * Mathf.Rad2Deg);
 

@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 2806645287089293697}
   - component: {fileID: 1405053149144512511}
   - component: {fileID: 2224152342720001258}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Clone of Player
-  m_TagString: Untagged
+  m_TagString: Clone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -141,7 +141,8 @@ MonoBehaviour:
   _hitLayer:
     serializedVersion: 2
     m_Bits: 640
-  direction: 0
+  _cloneTransform: {fileID: 0}
+  _direction: 0
 --- !u!50 &2224152342720001258
 Rigidbody2D:
   serializedVersion: 5

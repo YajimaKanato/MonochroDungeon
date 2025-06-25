@@ -1,26 +1,48 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameDirector : MonoBehaviour
 {
-    [Header("StageClear")]
+    [Header("GroupInCanvas")]
     [SerializeField]
-    Text _text;
+    GameObject _canvas;
 
-    [Header("StageNumber")]
+    [Header("PauseGroup")]
     [SerializeField]
-    int num;
+    GameObject _pause;
+
+    static bool _isPausing = false;
+    public static bool IsPausing { get { return _isPausing; } }
 
     private void Start()
     {
-        
+        _isPausing = false;
     }
     // Update is called once per frame
     void Update()
     {
         if (GoalforPlayer.IsGoal && GoalforClone.IsGoal)
         {
-            _text.GetComponent<Text>().text = "Stage" + num + " Clear!";
+            ObjectActive(_canvas);
         }
+        else if (Input.GetKeyDown(KeyCode.Escape) && _pause.activeSelf == false)
+        {
+            _isPausing = true;
+            ObjectActive(_pause);
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape) && _pause.activeSelf == true)
+        {
+            _isPausing = false;
+            ObjectInactive(_pause);
+        }
+    }
+
+    void ObjectActive(GameObject obj)
+    {
+        obj.SetActive(true);
+    }
+
+    void ObjectInactive(GameObject obj)
+    {
+        obj.SetActive(false);
     }
 }
