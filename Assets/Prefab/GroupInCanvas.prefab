@@ -313,7 +313,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &9193599392558121704
 Transform:
   m_ObjectHideFlags: 0
@@ -344,7 +344,7 @@ GameObject:
   - component: {fileID: 6153320543720753140}
   - component: {fileID: 426159553553864220}
   - component: {fileID: 6179669967836831027}
-  - component: {fileID: 877290814843821293}
+  - component: {fileID: 1552351771892063249}
   m_Layer: 5
   m_Name: Select
   m_TagString: Untagged
@@ -367,9 +367,9 @@ RectTransform:
   - {fileID: 2438400951623866483}
   m_Father: {fileID: 7269060985006972914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 470, y: -50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6153320543720753140
@@ -454,7 +454,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 877290814843821293}
+      - m_Target: {fileID: 1552351771892063249}
         m_TargetAssemblyTypeName: SceneChange, Assembly-CSharp
         m_MethodName: ChangeScene
         m_Mode: 5
@@ -466,7 +466,7 @@ MonoBehaviour:
           m_StringArgument: Select
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &877290814843821293
+--- !u!114 &1552351771892063249
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -570,7 +570,7 @@ GameObject:
   - component: {fileID: 103114776573383436}
   - component: {fileID: 7643525605778940211}
   - component: {fileID: 7431292378519266960}
-  - component: {fileID: 4072440189961522844}
+  - component: {fileID: 7773934094388339964}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -593,9 +593,9 @@ RectTransform:
   - {fileID: 5900472915671109008}
   m_Father: {fileID: 7269060985006972914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 150, y: -50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &103114776573383436
@@ -680,7 +680,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4072440189961522844}
+      - m_Target: {fileID: 7773934094388339964}
         m_TargetAssemblyTypeName: SceneChange, Assembly-CSharp
         m_MethodName: ChangeScene
         m_Mode: 5
@@ -692,7 +692,7 @@ MonoBehaviour:
           m_StringArgument: Title
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4072440189961522844
+--- !u!114 &7773934094388339964
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -717,7 +717,7 @@ GameObject:
   - component: {fileID: 6251999224993549996}
   - component: {fileID: 6952160957009619449}
   - component: {fileID: 3273395538076607369}
-  - component: {fileID: 1067822338337328938}
+  - component: {fileID: 5039801702030099444}
   m_Layer: 5
   m_Name: Next
   m_TagString: Untagged
@@ -740,9 +740,9 @@ RectTransform:
   - {fileID: 2800711267261134006}
   m_Father: {fileID: 7269060985006972914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 790, y: -50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6251999224993549996
@@ -827,7 +827,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1067822338337328938}
+      - m_Target: {fileID: 5039801702030099444}
         m_TargetAssemblyTypeName: SceneChange, Assembly-CSharp
         m_MethodName: ChangeScene
         m_Mode: 5
@@ -839,7 +839,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1067822338337328938
+--- !u!114 &5039801702030099444
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
