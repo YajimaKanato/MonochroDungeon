@@ -6,8 +6,7 @@ public class GoalforPlayer : MonoBehaviour
     [SerializeField]
     Transform _player;
 
-    static bool _isGoal = false;
-    public static bool IsGoal {  get { return _isGoal; } }
+    bool _isGoal = false;
 
     private void Start()
     {
@@ -24,5 +23,10 @@ public class GoalforPlayer : MonoBehaviour
                 _isGoal = true;
             }
         }
+    }
+
+    public bool GetIsGoal()
+    {
+        return _isGoal;
     }
 }

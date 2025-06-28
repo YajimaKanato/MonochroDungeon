@@ -307,9 +307,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9193599392558121704}
+  - component: {fileID: -4047673562390765111}
   m_Layer: 0
-  m_Name: GroupInCanvas
-  m_TagString: Untagged
+  m_Name: ResultGroup
+  m_TagString: Result
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -332,6 +333,18 @@ Transform:
   - {fileID: 7269060985006972914}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-4047673562390765111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4899071244996059983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d67d9c373a6c71d408320144e9d5e555, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5997485400358204269
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,12 @@ TagManager:
   tags:
   - Block
   - Clone
-  - BGMManager
+  - Result
+  - Pause
+  - GoalforPlayer
+  - GoalforClone
+  - GameDirector
+  - StageGroup
   layers:
   - Default
   - TransparentFX
