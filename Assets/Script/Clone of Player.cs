@@ -3,6 +3,8 @@ using System.Collections;
 
 public class CloneofPlayer : MonoBehaviour
 {
+    //Playerスクリプトをほぼコピーしている
+    
     [Header("HitObjectLayer")]
     [Tooltip("プレイヤーと同じ色を設定")]
     [SerializeField]
@@ -83,7 +85,7 @@ public class CloneofPlayer : MonoBehaviour
             _hitLayer & ~(1 << LayerMask.NameToLayer("Wall")));
 
         //移動
-        if (!_isMoving && Mathf.Abs(_moveX) == 1 && !_hitWall)
+        if (!_isMoving && Mathf.Abs(_moveX) == 1 && !_hitWall.collider)
         {// && !_isColorChanging
             Debug.Log("C:左右移動");
             _moveY = 0;
@@ -91,7 +93,7 @@ public class CloneofPlayer : MonoBehaviour
             Vector3 basePos = transform.position;
             StartCoroutine(MoveCoroutine(basePos));
         }
-        else if (!_isMoving && Mathf.Abs(_moveY) == 1 && !_hitWall)
+        else if (!_isMoving && Mathf.Abs(_moveY) == 1 && !_hitWall.collider)
         {// && !_isColorChanging
             Debug.Log("C:上下移動");
             _moveX = 0;

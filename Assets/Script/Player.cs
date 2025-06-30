@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     LayerMask _hitLayer;
     RaycastHit2D _hitWall;
-    static RaycastHit2D _hitBW;
+    static RaycastHit2D _hitBW;//色変え時に使用
     public static RaycastHit2D HitBW { get { return _hitBW; } }
     Vector3 _dir;
 
@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
             _hitLayer & ~(1 << LayerMask.NameToLayer("Wall")));
 
         //移動
-        if (!_isMoving && Mathf.Abs(_moveX) == 1 && !_hitWall)
+        if (!_isMoving && Mathf.Abs(_moveX) == 1 && !_hitWall.collider)
         {// && !_isColorChanging
             Debug.Log("左右移動");
             _moveY = 0;
@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
             Vector3 basePos = transform.position;
             StartCoroutine(MoveCoroutine(_moveX, _moveY, basePos));
         }
-        else if (!_isMoving && Mathf.Abs(_moveY) == 1 && !_hitWall)
+        else if (!_isMoving && Mathf.Abs(_moveY) == 1 && !_hitWall.collider)
         {// && !_isColorChanging
             Debug.Log("上下移動");
             _moveX = 0;
